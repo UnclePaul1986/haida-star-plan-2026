@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>海达星计划 2026 | 全员导览</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Noto+Sans+SC:wght@300;500;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --neon-pink: #ff00c1;
+            --neon-green: #00ff9d;
+            --neon-yellow: #fff000;
+            --neon-orange: #ff7b00;
+            --dark-bg: #050b18;
+            --glass: rgba(255, 255, 255, 0.08);
+        }
+
+        /* 基础样式优化 */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { 
+            height: 100%; width: 100%; 
+            background-color: var(--dark-bg); 
+            color: #fff; 
+            font-family: 'Noto Sans SC', sans-serif; 
+            overflow: hidden; 
+            scroll-behavior: smooth;
+        }
+
+        .aurora-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(188, 19, 254, 0.15) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* 页面切换逻辑 */
+        .page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; text-align: center; opacity: 0; transition: 0.4s ease;
+            overflow-y: auto;
+        }
+        .page.active { display: flex; opacity: 1; }
+
+        /* 顶部进度条 */
+        .progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 100; }
+        #progress-fill { height: 100%; width: 20%; background: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); transition: 0.4s; }
+
+        /* 文字与形象 */
+        h1 { font-family: 'Orbitron'; font-size: 2.5rem; text-shadow: 0 0 15px var(--neon-blue); margin-bottom: 5px; }
+        h2 { font-family: 'Orbitron'; font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 10px; }
+        .mascot-img { width: 120px; filter: drop-shadow(0 0 15px var(--neon-blue)); margin-bottom: 15px; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* 移动端卡片优化 */
+        .content-card {
+            background: var(--glass); backdrop-filter: blur(15px); border-radius: 15px;
+            padding: 25px; border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 350px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btn {
+            margin-top: 20px; padding: 12px 40px; background: transparent;
+            border: 2px solid var(--neon-blue); color: var(--neon-blue);
+            font-family: 'Orbitron'; font-weight: bold; font-size: 1rem;
+            border-radius: 30px; cursor: pointer; transition: 0.3s;
+            min-width: 200px;
+        }
+        .nav-btn:active, .nav-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
+
+        /* 奖励页面专属样式 */
+        .reward-title {
+            font-size: 1.5rem; font-family: 'Orbitron'; margin-bottom: 5px;
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .reward-subtitle {
+            font-size: 0.9rem; color: #ccc; margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .reward-points {
+            font-size: 2.5rem; font-weight: 900; margin: 15px 0;
+            font-family: 'Orbitron';
+            text-shadow: 0 0 15px;
+        }
+        
+        .reward-desc {
+            font-size: 0.85rem; line-height: 1.5; color: #e6e6e6;
+            padding: 0 10px; margin-bottom: 10px;
+        }
+        
+        .reward-icon {
+            font-size: 2.5rem; margin: 15px 0; animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .highlight-text {
+            color: var(--neon-yellow); font-weight: 500;
+            margin: 10px 0;
+        }
+        
+        /* 能量值动画 */
+        .energy-glow {
+            animation: energyPulse 1.5s infinite alternate;
+        }
+        
+        @keyframes energyPulse {
+            from { text-shadow: 0 0 10px currentColor; }
+            to { text-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+        }
+        
+        /* 页面专属颜色 */
+        .page-4 { color: var(--neon-blue); }
+        .page-5 { color: var(--neon-green); }
+        .page-6 { color: var(--neon-purple); }
+        .page-7 { color: var(--neon-orange); }
+        .page-8 { color: var(--neon-pink); }
+        .page-9 { color: var(--neon-yellow); }
+
+        /* 礼物卡片样式 */
+        .gift-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border-radius: 12px; padding: 15px; margin: 10px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .gift-card:hover {
+            transform: translateY(-5px);
+            border-color: currentColor;
+        }
+        
+        .gift-card h4 {
+            color: #fff; font-size: 0.9rem; margin-bottom: 5px;
+            display: flex; justify-content: space-between;
+        }
+        
+        .gift-card .points {
+            color: var(--neon-yellow); font-family: 'Orbitron';
+        }
+        
+        .gift-card p {
+            font-size: 0.75rem; color: #aaa; line-height: 1.4;
+        }
+
+        /* 扫码页优化 */
+        .qr-section { margin-top: 15px; }
+        .qr-code { 
+            width: 180px; height: 180px; 
+            border: 2px solid var(--neon-blue); 
+            padding: 5px; 
+            background: #fff; 
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+        .join-link { 
+            margin-top: 15px; 
+            color: var(--neon-blue); 
+            font-size: 0.7rem; 
+            word-break: break-all; 
+            opacity: 0.8;
+            background: rgba(0, 243, 255, 0.1);
+            padding: 8px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+
+        /* 规则项目样式 */
+        .rule-item { 
+            text-align: left; 
+            margin-bottom: 15px; 
+            border-left: 3px solid var(--neon-blue); 
+            padding-left: 10px; 
+            padding: 12px;
+            border-radius: 0 8px 8px 0;
+            background: rgba(0, 243, 255, 0.05);
+        }
+        .rule-item h4 { font-size: 0.9rem; color: var(--neon-blue); margin-bottom: 5px; }
+        .rule-item p { font-size: 0.75rem; color: #ccc; }
+
+        /* 响应式调整 */
+        @media (max-width: 320px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1rem; }
+            .content-card { padding: 15px; }
+            .reward-points { font-size: 2rem; }
+            .qr-code { width: 150px; height: 150px; }
+        }
+        
+        @media (min-width: 768px) {
+            .content-card { max-width: 400px; }
+            .mascot-img { width: 150px; }
+        }
+
+        /* 页脚链接 */
+        .footer-link {
+            font-size: 0.7rem; 
+            color: #666; 
+            text-decoration: none;
+            margin-top: 15px;
+            transition: color 0.3s;
+        }
+        
+        .footer-link:hover {
+            color: var(--neon-blue);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="aurora-bg"></div>
+    <div class="progress-container"><div id="progress-fill"></div></div>
+
+    <!-- P1: 欢迎页 -->
+    <div id="page1" class="page active">
+        <img src="./images/star_d_mascot.png" alt="Star-D" class="mascot-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"120\" viewBox=\"0 0 120 120\"><circle cx=\"60\" cy=\"60\" r=\"50\" fill=\"%2300f3ff\" opacity=\"0.2\"/><text x=\"60\" y=\"65\" text-anchor=\"middle\" fill=\"%2300f3ff\" font-family=\"Arial\" font-size=\"14\">STAR-D</text></svg>'">
+        <h1>HAIDA STAR</h1>
+        <h2>海达星计划 · 2026</h2>
+        <p style="font-size: 0.85rem; color: #aaa; padding: 0 10px; line-height: 1.6;">让每一个点赞都有价值<br>让每一份创意都能变现<br>开启你的职场星途之旅</p>
+        <button class="nav-btn" onclick="nextPage(2)">立即开启任务 ➔</button>
+        <p style="font-size: 0.7rem; color: #666; margin-top: 20px;">✨ 滑动或点击按钮浏览</p>
+    </div>
+
+    <!-- P2: 时间轴 -->
+    <div id="page2" class="page">
+        <h2>MISSION ROADMAP</h2>
+        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 20px;">规划你的成长路径，成就职场明星</p>
+        <div class="content-card">
+            <div class="rule-item">
+                <h4>🎯 1月 · 启动月</h4>
+                <p>基础互动预热，积分简单赚取，熟悉规则轻松起步</p>
+            </div>
+            <div class="rule-item" style="border-color:var(--neon-purple); background: rgba(188, 19, 254, 0.05);">
+                <h4>🚀 2-3月 · 养成期</h4>
+                <p>投稿素材与出镜，赢取高倍积分，展现你的独特才华</p>
+            </div>
+            <div class="rule-item" style="border-color:var(--neon-pink); background: rgba(255, 0, 193, 0.05);">
+                <h4>🏆 4-6月 · 深化期</h4>
+                <p>部门PK战开启，争夺年度大奖，团队荣耀共同创造</p>
+            </div>
+        </div>
+        <button class="nav-btn" onclick="nextPage(3)">了解积分规则 ➔</button>
+    </div>
+
+    <!-- P3: 积分规则 -->
+    <div id="page3" class="page">
+        <h2>POINTS RULES</h2>
+        <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 20px;">简单互动，丰厚回报</p>
+        <div class="content-card">
+            <div class="rule-item">
+                <h4>👁️ 点赞+观看</h4>
+                <p>+1 分 / 条 · 每日轻松积累的基础分</p>
+            </div>
+            <div class="rule-item">
+                <h4>💬 5字以上评论</h4>
+                <p>+3 分 / 条 · 分享你的真知灼见</p>
+            </div>
+            <div class="rule-item">
+                <h4>📤 转发朋友圈/群</h4>
+                <p>+5 分 / 条 · 让更多人看到我们的精彩</p>
+            </div>
+            <div class="rule-item" style="border-color:var(--neon-purple); background: rgba(188, 19, 254, 0.05);">
+                <h4>🎨 投稿素材/出镜</h4>
+                <p>+10 至 50 分 / 条 · 创意价值的最高认可</p>
+            </div>
+            <div style="margin-top: 15px; padding: 10px; background: rgba(255, 240, 0, 0.1); border-radius: 8px;">
+                <p style="font-size: 0.75rem; color: var(--neon-yellow);">💡 每日任务：完成所有基础互动可获得额外20分奖励！</p>
+            </div>
+        </div>
+        <button class="nav-btn" onclick="nextPage(4)">解锁能量商城 ➔</button>
+    </div>
+
+    <!-- ========== 6个奖励页面 ========== -->
+
+    <!-- P4: 即时小确幸 -->
+    <div id="page4" class="page page-4">
+        <h2 style="color: var(--neon-blue)">ENERGY LEVEL 1</h2>
+        <div class="content-card">
+            <div class="reward-icon">💫</div>
+            <div class="reward-title" style="color: var(--neon-blue)">即时小确幸</div>
+            <div class="reward-subtitle">工作疲惫时的小惊喜，积分就能马上兑换！</div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-blue)">
+                <h4>暖心奶茶券 <span class="points">10 PTS</span></h4>
+                <p>午后困倦，来杯温暖。选择你爱的口味，让甜蜜驱散疲惫，瞬间充满能量！</p>
+            </div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-blue)">
+                <h4>幸运红包 <span class="points">20-50 PTS</span></h4>
+                <p>随机金额的惊喜盲盒！可能是咖啡钱，也可能是一顿丰盛午餐，每天都充满期待！</p>
+            </div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-blue)">
+                <h4>办公室零食包 <span class="points">30 PTS</span></h4>
+                <p>能量补给站，拯救3点饥饿时光。与团队小伙伴分享快乐，让办公室充满欢声笑语。</p>
+            </div>
+            
+            <div class="highlight-text" style="color: var(--neon-blue); margin-top: 20px;">
+                "每天轻松互动，周周都有小惊喜！工作不止有KPI，还有触手可及的小幸福"
+            </div>
+        </div>
+        <button class="nav-btn" onclick="nextPage(5)">解锁更高等级 ➔</button>
+    </div>
+
+    <!-- P5: 品质生活家 -->
+    <div id="page5" class="page page-5">
+        <h2 style="color: var(--neon-green)">ENERGY LEVEL 2</h2>
+        <div class="content-card">
+            <div class="reward-icon">🛒</div>
+            <div class="reward-title" style="color: var(--neon-green)">品质生活家</div>
+            <div class="reward-subtitle">提升生活品质，用积分兑换心仪好物</div>
+            
+            <div class="reward-points energy-glow" style="color: var(--neon-green)">200 PTS</div>
+            
+            <div class="reward-desc">
+                <p>💳 <b>京东/购物卡</b> - 自由选购，满足你的购物欲，把喜欢的好物带回家</p>
+                <p>🎬 <b>视频平台年卡</b> - 追剧追综，放松时光，享受属于自己的休闲时刻</p>
+                <p>📚 <b>当当图书券</b> - 精神食粮，投资自我成长，让知识成为最好的装饰</p>
+                <p>☕ <b>星巴克礼券</b> - 精致下午茶，与同事朋友分享美好时光</p>
+            </div>
+            
+            <div class="highlight-text" style="color: var(--neon-green); margin-top: 15px;">
+                "每一次点赞，都在为更好的生活添砖加瓦。你的努力，值得更好的犒赏"
+            </div>
+            
+            <div style="margin-top: 15px; font-size: 0.75rem; color: #aaa; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                <p>🎯 <b>目标指南</b>：每天互动 + 每周投稿 = 1个月轻松达成</p>
+                <p style="font-size: 0.7rem; color: var(--neon-green); margin-top: 5px;">坚持就是力量，品质生活触手可及</p>
+            </div>
+        </div>
+        <button class="nav-btn" onclick="nextPage(6)">追求时间自由 ➔</button>
+    </div>
+
+    <!-- P6: 时间掌控者 -->
+    <div id="page6" class="page page-6">
+        <h2 style="color: var(--neon-purple)">ENERGY LEVEL 3</h2>
+        <div class="content-card">
+            <div class="reward-icon">⏰</div>
+            <div class="reward-title" style="color: var(--neon-purple)">时间掌控者</div>
+            <div class="reward-subtitle">最珍贵的礼物，是属于自己的时间</div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-purple)">
+                <h4>半天带薪假 <span class="points" style="color: var(--neon-purple)">250 PTS</span></h4>
+                <p>无需理由，说走就走。睡个懒觉、看场电影、陪伴家人，自由安排美好时光，享受真正的放松。</p>
+                <p style="color: var(--neon-purple); font-size: 0.7rem; margin-top: 5px;">🌟 季度明星员工专属福利价，你的努力值得特别优待</p>
+            </div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-purple)">
+                <h4>弹性工作日 <span class="points" style="color: var(--neon-purple)">150 PTS</span></h4>
+                <p>避开早高峰，享受悠闲早晨。或提前下班，迎接夕阳。工作与生活的完美平衡，由你定义。</p>
+            </div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-purple)">
+                <h4>远程办公日 <span class="points" style="color: var(--neon-purple)">100 PTS</span></h4>
+                <p>在家舒适办公，节省通勤时间。陪伴家人，享受自由，工作效率加倍提升。</p>
+            </div>
+            
+            <div class="reward-desc" style="margin-top: 15px; border-top: 1px solid rgba(188, 19, 254, 0.3); padding-top: 15px;">
+                <p>🕐 <b>时间就是最稀缺的资源</b>，在这里你可以用努力兑换自由</p>
+                <p>💪 <b>完成月度挑战任务</b>，还可获得时间加成券，加速实现时间自由！</p>
+            </div>
+            
+            <div style="background: rgba(188, 19, 254, 0.1); padding: 10px; border-radius: 8px; margin-top: 15px; border: 1px solid var(--neon-purple)">
+                <p style="font-size: 0.8rem; color: var(--neon-purple); text-align: center;">
+                    "时间不等人，但积分可以兑换时间。掌控时间，才能掌控生活"
+                </p>
+            </div>
+        </div>
+        <button class="nav-btn" onclick="nextPage(7)">进阶特权体验 ➔</button>
+    </div>
+
+    <!-- P7: 尊享特权层 -->
+    <div id="page7" class="page page-7">
+        <h2 style="color: var(--neon-orange)">ENERGY LEVEL 4</h2>
+        <div class="content-card">
+            <div class="reward-icon">👑</div>
+            <div class="reward-title" style="color: var(--neon-orange)">尊享特权层</div>
+            <div class="reward-subtitle">精英专属体验，职场高光时刻</div>
+            
+            <div class="reward-points energy-glow" style="color: var(--neon-orange)">500 PTS</div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-orange)">
+                <h4>总经理下午茶 <span class="points" style="color: var(--neon-orange)">500 PTS</span></h4>
+                <p>与高管面对面交流，分享你的独到见解。私人定制主题，你的话题你做主，让思想碰撞火花。</p>
+                <p style="color: var(--neon-orange); font-size: 0.7rem; margin-top: 5px;">🌟 获得职业指导，扩展人脉资源，开启职场新视野</p>
+            </div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-orange)">
+                <h4>专属停车位 <span class="points" style="color: var(--neon-orange)">300 PTS/月</span></h4>
+                <p>告别抢车位的烦恼，享受尊贵专属待遇。每天早上多睡10分钟，从容开启一天工作。</p>
+            </div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-orange)">
+                <h4>生日特权包 <span class="points" style="color: var(--neon-orange)">200 PTS</span></h4>
+                <p>豪华生日礼盒 + 团队祝福视频 + 生日带薪假，让特别的日子更加难忘。</p>
+            </div>
+            
+            <div style="background: rgba(255,123,0,0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border: 2px solid var(--neon-orange)">
+                <p style="font-size: 0.85rem; color: var(--neon-orange); text-align: center; font-weight: bold;">
+                    "这不是消费，这是投资你的职场影响力<br>每一次亮相，都在积累你的个人品牌"
+                </p>
+            </div>
+            
+            <div class="reward-desc">
+                <p>🎯 <b>特权解锁条件</b>：季度积分排名前20%自动获得特权体验券</p>
+                <p>🏆 <b>连续特权</b>：连续两季度保持排名，特权升级</p>
+            </div>
+        </div>
+        <button class="nav-btn" onclick="nextPage(8)">冲击职场巅峰 ➔</button>
+    </div>
+
+    <!-- P8: 职场加速器 -->
+    <div id="page8" class="page page-8">
+        <h2 style="color: var(--neon-pink)">ENERGY LEVEL 5</h2>
+        <div class="content-card">
+            <div class="reward-icon">🚀</div>
+            <div class="reward-title" style="color: var(--neon-pink)">职场加速器</div>
+            <div class="reward-subtitle">为你的职业生涯按下加速键</div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-pink)">
+                <h4>绩效加分 <span class="points" style="color: var(--neon-pink)">1000 PTS</span></h4>
+                <p>直接体现在季度/年度绩效考核中，影响评优、晋升与奖金。这是你职业发展的黄金筹码，让努力被看见。</p>
+                <p style="color: var(--neon-pink); font-size: 0.7rem; margin-top: 5px;">💼 可累积使用，最高可加15%绩效分</p>
+            </div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-pink)">
+                <h4>培训基金 <span class="points" style="color: var(--neon-pink)">800 PTS</span></h4>
+                <p>用于外部课程、行业会议、认证考试，公司报销支持。投资自己，是最好的成长方式。</p>
+            </div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-pink)">
+                <h4>高管导师制 <span class="points" style="color: var(--neon-pink)">1200 PTS</span></h4>
+                <p>一对一高管指导，获得职业发展建议与人脉资源。站在巨人肩膀上看世界。</p>
+            </div>
+            
+            <div class="gift-card" style="border-left: 3px solid var(--neon-pink); background: linear-gradient(45deg, rgba(255,0,193,0.1), rgba(188,19,254,0.1));">
+                <h4>晋升绿色通道 <span class="points" style="color: var(--neon-pink)">1500 PTS</span></h4>
+                <p>年度积分王者可直接进入晋升候选名单，跳过初步筛选，直通面试环节。</p>
+            </div>
+            
+            <div class="highlight-text" style="color: var(--neon-pink); margin-top: 15px; font-size: 0.9rem;">
+                "这不仅仅是积分，这是你未来薪水的预付款<br>每一分都在为你的职业道路铺就基石"
+            </div>
+            
+            <div style="margin-top: 15px; padding: 10px; background: rgba(255,0,193,0.05); border-radius: 8px;">
+                <p style="font-size: 0.75rem; color: #ff66cc;">
+                    🎖️ <b>职场加速计划</b>：年度积分TOP10自动加入公司人才库，获得更多发展机会
+                </p>
+            </div>
+        </div>
+        <button class="nav-btn" onclick="nextPage(9)">终极大奖揭晓 ➔</button>
+    </div>
+
+    <!-- P9: 终极梦想家 -->
+    <div id="page9" class="page page-9">
+        <h2 style="color: var(--neon-yellow)">ENERGY LEVEL ∞</h2>
+        <div class="content-card">
+            <div class="reward-icon">🏆</div>
+            <div class="reward-title" style="color: var(--neon-yellow)">终极梦想家</div>
+            <div class="reward-subtitle">年度巅峰荣耀，值得全年奋斗</div>
+            
+            <div class="reward-points energy-glow" style="color: var(--neon-yellow); font-size: 3rem; margin: 20px 0;">2000 PTS</div>
+            
+            <div style="background: linear-gradient(45deg, rgba(255,240,0,0.1), rgba(255,123,0,0.1)); padding: 20px; border-radius: 12px; margin: 15px 0; border: 3px solid var(--neon-yellow); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; background: var(--neon-yellow); opacity: 0.1; border-radius: 50%;"></div>
+                <h3 style="color: var(--neon-yellow); margin-bottom: 10px; font-size: 1.3rem;">年度团队旅游大奖</h3>
+                <p style="font-size: 0.9rem; color: #fff; margin-bottom: 5px;">✨ 巴厘岛阳光沙滩 / 日本樱花之旅 / 北欧极光探索 ✨</p>
+                <p style="font-size: 0.8rem; color: #ffd700; margin-top: 8px; line-height: 1.4;">
+                    ✈️ 全包式豪华旅行 · 五星级住宿体验<br>
+                    🍽️ 米其林餐厅美食 · 专业导游陪同<br>
+                    📸 专属旅行纪念册 · 全程摄影跟拍
+                </p>
+            </div>
+            
+            <div class="reward-desc" style="text-align: left; margin-top: 20px;">
+                <p>🎯 <b>部门冠军额外奖励</b>：旅游预算提升30%，选择更奢华体验</p>
+                <p>🌟 <b>个人积分王</b>：头等舱升级 + 5000元旅游购物津贴</p>
+                <p>📸 <b>旅行Vlog之星</b>：额外获得专业摄影器材套装（价值8000元）</p>
+                <p>🏅 <b>荣誉殿堂</b>：姓名永载公司星光荣誉墙，成为传奇</p>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; border: 2px solid rgba(255,240,0,0.3); border-radius: 10px; background: linear-gradient(to right, rgba(255,240,0,0.05), rgba(255,123,0,0.05));">
+                <p style="font-size: 0.85rem; color: #ffd700; line-height: 1.5; font-style: italic;">
+                    "这不是终点，而是新篇章的起点。<br>
+                    每一次互动，都在书写你的荣耀之路。<br>
+                    每一次分享，都在积累你的星光时刻。<br>
+                    年度王者，不仅是旅行，更是永恒的荣誉。"
+                </p>
+            </div>
+            
+            <div style="margin-top: 15px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;">
+                <p style="font-size: 0.75rem; color: #aaa;">
+                    🎖️ <b>积分策略</b>：积极参与+创意投稿+团队协作 = 冲击年度大奖
+                </p>
+            </div>
+        </div>
+        <button class="nav-btn" onclick="nextPage(10)">立即加入征程 ➔</button>
+    </div>
+
+    <!-- P10: 加入小程序 (终点页) -->
+    <div id="page10" class="page">
+        <h2 style="color: var(--neon-blue)">READY TO JOIN?</h2>
+        <div class="content-card">
+            <div class="reward-icon">🚀</div>
+            <p style="font-size: 0.9rem; margin-bottom: 10px; color: #fff;">你的星途，由此启航</p>
+            <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 20px; line-height: 1.5;">
+                扫描下方二维码，开启你的海达星之旅<br>
+                积累星光，兑换梦想，成就非凡
+            </p>
+            
+            <div class="qr-section">
+                <img src="./images/mini_program_qr.jpg" alt="小程序码" class="qr-code" 
+                     onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"180\" height=\"180\" viewBox=\"0 0 180 180\"><rect width=\"180\" height=\"180\" fill=\"%23fff\" rx=\"10\"/><text x=\"90\" y=\"100\" text-anchor=\"middle\" fill=\"%23000\" font-family=\"Arial\" font-size=\"14\">小程序码</text><text x=\"90\" y=\"120\" text-anchor=\"middle\" fill=\"%23000\" font-family=\"Arial\" font-size=\"12\">请替换为实际二维码</text></svg>'">
+                <p style="font-size: 0.8rem; color: var(--neon-blue); margin-top: 12px; font-weight: bold;">长按识别小程序码立即参与</p>
+            </div>
+            
+            <div style="margin: 20px 0; text-align: center;">
+                <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem;">✨</div>
+                        <div style="font-size: 0.7rem; color: #aaa;">即刻参与</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem;">🎯</div>
+                        <div style="font-size: 0.7rem; color: #aaa;">积累积分</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem;">🏆</div>
+                        <div style="font-size: 0.7rem; color: #aaa;">兑换梦想</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="nav-btn" style="background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; width: 100%; margin-top: 10px; border: none; font-weight: bold;" 
+                onclick="window.open('https://mp.weixin.qq.com/s/Your_Article_Link_With_MiniProgram_Entry', '_blank')">
+                ⚡ 立即启程，兑换未来 ⚡
+            </button>
+
+            <div class="join-link">
+                <div style="font-size: 0.6rem; color: var(--neon-blue); margin-bottom: 5px;">备用接口路径：</div>
+                pages/portal/join/join?scene=206555_f41f60c26ce149cd
+            </div>
+            
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="font-size: 0.75rem; color: #666; line-height: 1.4;">
+                    如有问题，请联系：<br>
+                    📧 人力资源部 · 企业文化组<br>
+                    📞 分机号：8888
+                </p>
+            </div>
+        </div>
+        <a href="javascript:void(0)" class="footer-link" onclick="nextPage(1)">重新查看奖励</a>
+        <p style="font-size: 0.6rem; color: #444; margin-top: 10px;">海达星计划 2026 · 版本 1.0</p>
+    </div>
+
+    <script>
+        const totalPages = 10;
+        let currentPage = 1;
+        
+        function nextPage(num) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + num).classList.add('active');
+            document.getElementById('progress-fill').style.width = (num / totalPages * 100) + '%';
+            currentPage = num;
+            
+            // 为奖励页面添加专属背景色
+            if (num >= 4 && num <= 9) {
+                const colors = {
+                    4: '#05101a', 5: '#051a12', 6: '#10051a', 
+                    7: '#1a1005', 8: '#1a0510', 9: '#1a1505'
+                };
+                document.body.style.backgroundColor = colors[num] || 'var(--dark-bg)';
+            } else {
+                document.body.style.backgroundColor = 'var(--dark-bg)';
+            }
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+        
+        // 添加键盘导航支持
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                event.preventDefault();
+                if (currentPage < totalPages) {
+                    nextPage(currentPage + 1);
+                }
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                if (currentPage > 1) {
+                    nextPage(currentPage - 1);
+                }
+            }
+        });
+        
+        // 添加触摸滑动支持
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        }, false);
+        
+        document.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+        
+        function handleSwipe() {
+            const swipeThreshold = 50; // 最小滑动距离
+            
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // 向左滑动，下一页
+                if (currentPage < totalPages) {
+                    nextPage(currentPage + 1);
+                }
+            } else if (touchEndX > touchStartX + swipeThreshold) {
+                // 向右滑动，上一页
+                if (currentPage > 1) {
+                    nextPage(currentPage - 1);
+                }
+            }
+        }
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            nextPage(1);
+            
+            // 添加页面加载动画
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+        
+        // 添加页面切换历史记录（可选）
+        function updateHistory(pageNum) {
+            if (history.pushState) {
+                history.pushState({page: pageNum}, '', `#page${pageNum}`);
+            }
+        }
+        
+        // 处理浏览器前进后退
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.page) {
+                nextPage(event.state.page);
+            }
+        });
+    </script>
+</body>
+</html>
